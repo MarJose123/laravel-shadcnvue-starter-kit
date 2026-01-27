@@ -3,8 +3,8 @@ export const description = "A login page with form and image.";
 </script>
 
 <script setup lang="ts">
+import { Head } from "@inertiajs/vue3";
 import LoginForm from "@/components/LoginForm.vue";
-import {Head} from "@inertiajs/vue3";
 </script>
 
 <template>
