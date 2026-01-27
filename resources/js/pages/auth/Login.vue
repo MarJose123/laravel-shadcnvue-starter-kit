@@ -4,9 +4,11 @@ export const description = "A login page with form and image.";
 
 <script setup lang="ts">
 import LoginForm from "@/components/LoginForm.vue";
+import {Head} from "@inertiajs/vue3";
 </script>
 
 <template>
+    <Head title="Login" />
     <div
         class="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10"
     >
