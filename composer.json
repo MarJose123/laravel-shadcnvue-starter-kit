@@ -54,19 +54,23 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "bun install",
+            "bun run build"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
+            "bunx --bun concurrently \"composer mailpit\" \"composer reverb\" \"@php artisan queue:listen --tries=1\" \"@php artisan schedule:work\" \"bun run dev\" --names=mailserver,reverb,queue,scheduler,vite --kill-others --prefix name -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" "
+        ],
+        "herd:dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "bunx --bun concurrently -c cyan,blue,green,yellow \"composer run reverb\" \"composer run queue\" \"composer run mailpit\" \"bun run dev\" --names=reverb,queue,mailserver,dev --kill-others"
         ],
         "format:be": [
             "vendor/bin/pint"
         ],
         "format:fe": [
-            "npm run format",
-            "npm run lint"
+            "bun run format",
+            "bun run lint"
         ],
         "format": [
             "@format:be",
