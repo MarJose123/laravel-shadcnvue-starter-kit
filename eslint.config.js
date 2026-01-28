@@ -1,6 +1,7 @@
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript';
 import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
+import unusedImports from "eslint-plugin-unused-imports";
 import vue from 'eslint-plugin-vue';
 
 export default defineConfigWithVueTs(
@@ -12,6 +13,7 @@ export default defineConfigWithVueTs(
     {
         plugins: {
             import: importPlugin,
+            "unused-imports": unusedImports,
         },
         settings: {
             'import/resolver': {
@@ -41,6 +43,17 @@ export default defineConfigWithVueTs(
                     },
                 },
             ],
+            "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
+            "unused-imports/no-unused-imports": "error",
+            "unused-imports/no-unused-vars": [
+                "warn",
+                {
+                    "vars": "all",
+                    "varsIgnorePattern": "^_",
+                    "args": "after-used",
+                    "argsIgnorePattern": "^_",
+                },
+            ]
         },
     },
     prettier,
