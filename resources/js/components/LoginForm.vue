@@ -43,12 +43,7 @@ const props = defineProps<{
                         </div>
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
-                            <Input
-                                name="email"
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                            />
+                            <Input name="email" id="email" type="email" />
                             <FieldError v-if="errors.email">{{
                                 errors.email
                             }}</FieldError>
