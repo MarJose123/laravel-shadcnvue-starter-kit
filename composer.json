@@ -21,7 +21,8 @@
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/fortify": "^1.33",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.1",
@@ -98,6 +99,11 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "pre-commit": [
+            "@rector",
+            "@format",
+            "@analyse"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -124,7 +130,8 @@
         "mailpit": "Run the mailpit server for testing emails",
         "rector": "Fixing the code according to the Rector Rules",
         "rector:check": "Showing the suggested changes from Rector",
-        "analyse": "Analyse the code with PHPStan code analysis"
+        "analyse": "Analyse the code with PHPStan code analysis",
+        "pre-commit": "Run the pre-commit hooks"
     },
     "extra": {
         "laravel": {

@@ -27,11 +27,24 @@ const props = defineProps<{
                         <div
                             class="flex flex-col items-center gap-2 text-center"
                         >
-                            <h1 class="text-2xl font-bold">Welcome back</h1>
-                            <p class="text-muted-foreground text-balance">
-                                Enter your email and password below to log in
+                            <h1 class="text-2xl font-bold">
+                                Create your account
+                            </h1>
+                            <p
+                                class="text-muted-foreground text-sm text-balance"
+                            >
+                                Enter your email below to create your account
                             </p>
                         </div>
+                        <Field>
+                            <FieldLabel for="name"> Full Name </FieldLabel>
+                            <Input
+                                id="name"
+                                type="text"
+                                placeholder="John Doe"
+                                required
+                            />
+                        </Field>
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
                             <Input
@@ -40,23 +53,33 @@ const props = defineProps<{
                                 placeholder="m@example.com"
                                 required
                             />
+                            <FieldDescription>
+                                We'll use this to contact you. We will not share
+                                your email with anyone else.
+                            </FieldDescription>
                         </Field>
                         <Field>
-                            <div class="flex items-center">
-                                <FieldLabel for="password">
-                                    Password
-                                </FieldLabel>
-                                <Link
-                                    :href="route('password.request', {}, false)"
-                                    class="ml-auto text-sm underline-offset-2 hover:underline"
-                                >
-                                    Forgot your password?
-                                </Link>
-                            </div>
+                            <FieldLabel for="password"> Password </FieldLabel>
                             <Input id="password" type="password" required />
+                            <FieldDescription>
+                                Must be at least 12 characters long.
+                            </FieldDescription>
                         </Field>
                         <Field>
-                            <Button type="submit"> Login </Button>
+                            <FieldLabel for="confirm-password">
+                                Confirm Password
+                            </FieldLabel>
+                            <Input
+                                id="confirm-password"
+                                type="password"
+                                required
+                            />
+                            <FieldDescription
+                                >Please confirm your password.</FieldDescription
+                            >
+                        </Field>
+                        <Field>
+                            <Button type="submit"> Create Account </Button>
                         </Field>
                         <FieldSeparator
                             class="*:data-[slot=field-separator-content]:bg-card"
@@ -74,7 +97,7 @@ const props = defineProps<{
                                         fill="currentColor"
                                     />
                                 </svg>
-                                <span class="sr-only">Login with Apple</span>
+                                <span class="sr-only">Sign up with Apple</span>
                             </Button>
                             <Button variant="outline" type="button">
                                 <svg
@@ -86,7 +109,7 @@ const props = defineProps<{
                                         fill="currentColor"
                                     />
                                 </svg>
-                                <span class="sr-only">Login with Google</span>
+                                <span class="sr-only">Sign up with Google</span>
                             </Button>
                             <Button variant="outline" type="button">
                                 <svg
@@ -98,12 +121,14 @@ const props = defineProps<{
                                         fill="currentColor"
                                     />
                                 </svg>
-                                <span class="sr-only">Login with Meta</span>
+                                <span class="sr-only">Sign up with Meta</span>
                             </Button>
                         </Field>
                         <FieldDescription class="text-center">
-                            Don't have an account?
-                            <Link :href="route('register')"> Sign up </Link>
+                            Already have an account?
+                            <Link :href="route('login', {}, false)"
+                                >Sign in</Link
+                            >
                         </FieldDescription>
                     </FieldGroup>
                 </form>
@@ -118,8 +143,7 @@ const props = defineProps<{
         </Card>
         <FieldDescription class="px-6 text-center">
             By clicking continue, you agree to our
-            <Link href="#">Terms of Service</Link> and
-            <a href="#">Privacy Policy</a>.
+            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
         </FieldDescription>
     </div>
 </template>

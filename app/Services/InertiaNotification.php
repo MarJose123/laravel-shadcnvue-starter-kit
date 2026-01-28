@@ -85,14 +85,12 @@ final class InertiaNotification
         return $this;
     }
 
-
     public function icon(string $icon): self
     {
         $this->icon = $icon;
 
         return $this;
     }
-
 
     public function color(string $color): self
     {
