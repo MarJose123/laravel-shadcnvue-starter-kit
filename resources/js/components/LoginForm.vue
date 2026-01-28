@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { Link } from "@inertiajs/vue3";
+import { Link, Form } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
@@ -22,7 +24,14 @@ const props = defineProps<{
     <div :class="cn('flex flex-col gap-6', props.class)">
         <Card class="overflow-hidden p-0">
             <CardContent class="grid p-0 md:grid-cols-2">
-                <form class="p-6 md:p-8">
+                <Form
+                    class="p-6 md:p-8"
+                    :action="route('login.store', {}, false)"
+                    method="post"
+                    :reset-on-success="['password']"
+                    :reset-on-error="['password']"
+                    v-slot="{ errors, processing }"
+                >
                     <FieldGroup>
                         <div
                             class="flex flex-col items-center gap-2 text-center"
@@ -35,11 +44,14 @@ const props = defineProps<{
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
                             <Input
+                                name="email"
                                 id="email"
                                 type="email"
                                 placeholder="m@example.com"
-                                required
                             />
+                            <FieldError v-if="errors.email">{{
+                                errors.email
+                            }}</FieldError>
                         </Field>
                         <Field>
                             <div class="flex items-center">
@@ -53,10 +65,20 @@ const props = defineProps<{
                                     Forgot your password?
                                 </Link>
                             </div>
-                            <Input id="password" type="password" required />
+                            <Input
+                                id="password"
+                                type="password"
+                                name="password"
+                            />
+                            <FieldError v-if="errors.password">{{
+                                errors.password
+                            }}</FieldError>
                         </Field>
                         <Field>
-                            <Button type="submit"> Login </Button>
+                            <Button type="submit" :disabled="processing">
+                                <Spinner v-if="processing" />
+                                Login
+                            </Button>
                         </Field>
                         <FieldSeparator
                             class="*:data-[slot=field-separator-content]:bg-card"
@@ -106,7 +128,7 @@ const props = defineProps<{
                             <Link :href="route('register')"> Sign up </Link>
                         </FieldDescription>
                     </FieldGroup>
-                </form>
+                </Form>
                 <div class="bg-muted relative hidden md:block">
                     <img
                         src="https://www.shadcn-vue.com/placeholder.svg"

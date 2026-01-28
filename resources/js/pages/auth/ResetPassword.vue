@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
+import GuestLayout from "@/components/GuestLayout.vue";
 import ResetPasswordForm from "@/components/ResetPasswordForm.vue";
 </script>
 <template>
-    <div
+    <Head title="Reset Password" />
+    <GuestLayout
         class="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10"
     >
-        <Head title="Reset Password" />
         <div class="w-full max-w-sm md:max-w-4xl">
             <ResetPasswordForm />
         </div>
-    </div>
+    </GuestLayout>
 </template>
