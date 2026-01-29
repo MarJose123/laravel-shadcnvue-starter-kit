@@ -28,7 +28,7 @@ const props = defineProps<{
                     class="p-6 md:p-8"
                     method="post"
                     :action="route('password.email')"
-                    v-slot="{ processing, errors }"
+                    v-slot="{ processing, errors, recentlySuccessful }"
                 >
                     <FieldGroup>
                         <div
@@ -54,6 +54,12 @@ const props = defineProps<{
                             <FieldError v-if="errors.email">{{
                                 errors.email
                             }}</FieldError>
+                            <div
+                                v-if="status && recentlySuccessful"
+                                class="mb-4 text-center text-sm font-medium text-green-600"
+                            >
+                                {{ status }}
+                            </div>
                         </Field>
                         <Field>
                             <Button type="submit" :disabled="processing">
