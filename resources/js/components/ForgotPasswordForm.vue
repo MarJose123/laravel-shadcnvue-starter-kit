@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { Link } from "@inertiajs/vue3";
+import { Form, Link } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
     class?: HTMLAttributes["class"];
+    status?: string;
 }>();
 </script>
 
@@ -21,7 +24,12 @@ const props = defineProps<{
     <div :class="cn('flex flex-col gap-6', props.class)">
         <Card class="overflow-hidden p-0">
             <CardContent class="grid p-0 md:grid-cols-2">
-                <form class="p-6 md:p-8">
+                <Form
+                    class="p-6 md:p-8"
+                    method="post"
+                    :action="route('password.email')"
+                    v-slot="{ processing, errors }"
+                >
                     <FieldGroup>
                         <div
                             class="flex flex-col items-center gap-2 text-center"
@@ -37,18 +45,21 @@ const props = defineProps<{
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
                             <Input
+                                name="email"
                                 id="email"
                                 type="email"
-                                placeholder="m@example.com"
+                                autofocus
                                 required
                             />
-                            <FieldDescription>
-                                We'll use this to contact you. We will share the
-                                reset link with you.
-                            </FieldDescription>
+                            <FieldError v-if="errors.email">{{
+                                errors.email
+                            }}</FieldError>
                         </Field>
                         <Field>
-                            <Button type="submit"> Send Reset Link </Button>
+                            <Button type="submit" :disabled="processing">
+                                <Spinner v-if="processing" />
+                                Send Reset Link
+                            </Button>
                         </Field>
                         <FieldDescription class="text-center">
                             Already have an account?
@@ -57,7 +68,7 @@ const props = defineProps<{
                             >
                         </FieldDescription>
                     </FieldGroup>
-                </form>
+                </Form>
                 <div class="bg-muted relative hidden md:block">
                     <img
                         src="https://www.shadcn-vue.com/placeholder.svg"

@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { Link } from "@inertiajs/vue3";
+import { Form, Link } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
@@ -21,7 +23,14 @@ const props = defineProps<{
     <div :class="cn('flex flex-col gap-6', props.class)">
         <Card class="overflow-hidden p-0">
             <CardContent class="grid p-0 md:grid-cols-2">
-                <form class="p-6 md:p-8">
+                <Form
+                    class="p-6 md:p-8"
+                    method="post"
+                    :action="route('register.store')"
+                    :reset-on-error="['password', 'password_confirmation']"
+                    :reset-on-success="['password', 'password_confirmation']"
+                    v-slot="{ errors, processing, clearErrors }"
+                >
                     <FieldGroup>
                         <div
                             class="flex flex-col items-center gap-2 text-center"
@@ -35,50 +44,83 @@ const props = defineProps<{
                                 Enter your email below to create your account
                             </p>
                         </div>
-                        <Field>
+                        <Field :data-invalid="errors.hasOwnProperty('name')">
                             <FieldLabel for="name"> Full Name </FieldLabel>
                             <Input
+                                name="name"
                                 id="name"
                                 type="text"
                                 placeholder="John Doe"
-                                required
+                                @update:modelValue="() => clearErrors('name')"
                             />
+                            <FieldError v-if="errors.name">{{
+                                errors.name
+                            }}</FieldError>
                         </Field>
-                        <Field>
+                        <Field :data-invalid="errors.hasOwnProperty('email')">
                             <FieldLabel for="email"> Email </FieldLabel>
                             <Input
+                                name="email"
                                 id="email"
                                 type="email"
                                 placeholder="m@example.com"
-                                required
+                                @update:modelValue="() => clearErrors('email')"
                             />
+                            <FieldError v-if="errors.email">{{
+                                errors.email
+                            }}</FieldError>
                             <FieldDescription>
                                 We'll use this to contact you. We will not share
                                 your email with anyone else.
                             </FieldDescription>
                         </Field>
-                        <Field>
+                        <Field
+                            :data-invalid="errors.hasOwnProperty('password')"
+                        >
                             <FieldLabel for="password"> Password </FieldLabel>
-                            <Input id="password" type="password" required />
+                            <Input
+                                name="password"
+                                id="password"
+                                type="password"
+                                @update:modelValue="
+                                    () => clearErrors('password')
+                                "
+                            />
                             <FieldDescription>
                                 Must be at least 12 characters long.
                             </FieldDescription>
+                            <FieldError v-if="errors.password">{{
+                                errors.password
+                            }}</FieldError>
                         </Field>
-                        <Field>
+                        <Field
+                            :data-invalid="
+                                errors.hasOwnProperty('password_confirmation')
+                            "
+                        >
                             <FieldLabel for="confirm-password">
                                 Confirm Password
                             </FieldLabel>
                             <Input
+                                name="password_confirmation"
                                 id="confirm-password"
                                 type="password"
-                                required
+                                @update:modelValue="
+                                    () => clearErrors('password_confirmation')
+                                "
                             />
                             <FieldDescription
                                 >Please confirm your password.</FieldDescription
                             >
+                            <FieldError v-if="errors.password_confirmation">{{
+                                errors.password_confirmation
+                            }}</FieldError>
                         </Field>
                         <Field>
-                            <Button type="submit"> Create Account </Button>
+                            <Button type="submit" :disabled="processing">
+                                <Spinner v-if="processing" />
+                                Create Account
+                            </Button>
                         </Field>
 
                         <FieldDescription class="text-center">
@@ -88,7 +130,7 @@ const props = defineProps<{
                             >
                         </FieldDescription>
                     </FieldGroup>
-                </form>
+                </Form>
                 <div class="bg-muted relative hidden md:block">
                     <img
                         src="https://www.shadcn-vue.com/placeholder.svg"

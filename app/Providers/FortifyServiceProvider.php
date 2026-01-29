@@ -47,18 +47,20 @@ class FortifyServiceProvider extends ServiceProvider
             'canRegister'      => Features::enabled(Features::registration()),
         ]));
 
+        Fortify::registerView(fn () => Inertia::render('auth/Register'));
+
+        Fortify::requestPasswordResetLinkView(fn (Request $request) => Inertia::render('auth/ForgotPassword'));
+
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/ResetPassword', [
             'email' => $request->email,
             'token' => $request->route('token'),
         ]));
 
-        Fortify::requestPasswordResetLinkView(fn (Request $request) => Inertia::render('auth/ForgotPassword'));
         //
         //        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/VerifyEmail', [
         //            'status' => $request->session()->get('status'),
         //        ]));
         //
-        Fortify::registerView(fn () => Inertia::render('auth/Register'));
         //
         //        Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/TwoFactorChallenge'));
         //

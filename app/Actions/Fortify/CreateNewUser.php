@@ -30,11 +30,12 @@ class CreateNewUser implements CreatesNewUsers
                 'max:255',
                 Rule::unique(User::class),
             ],
-            'password' => $this->passwordRules(),
+            'password'              => $this->passwordRules(),
+            'password_confirmation' => ['confirmed', ...$this->passwordRules()],
         ])->validate();
 
         return User::query()->create([
-            'name'     => $input['name'],
+            'name'     => str($input['name'])->trim()->ucwords(),
             'email'    => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
