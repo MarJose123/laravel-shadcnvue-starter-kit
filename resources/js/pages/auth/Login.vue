@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
 import LoginForm from "@/components/LoginForm.vue";
-import GuestLayout from "@/components/GuestLayout.vue";
+import GuestLayout from "@/layouts/GuestLayout.vue";
 </script>
 
 <template>

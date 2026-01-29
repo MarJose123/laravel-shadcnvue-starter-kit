@@ -1,14 +1,12 @@
-export type NotificationType =
+export type TNotification =
     | "success"
     | "error"
     | "warning"
     | "info"
     | (string & {});
 
-export interface Notification {
-    type: NotificationType;
-    icon: string;
-    color: string;
+export interface INotification {
+    type: TNotification;
     title?: string;
     message: string;
 }

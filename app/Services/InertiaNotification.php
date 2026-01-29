@@ -9,10 +9,6 @@ use Inertia\Inertia;
 
 final class InertiaNotification
 {
-    protected string $icon;
-
-    protected string $color;
-
     protected InertiaNotificationType|string $type;
 
     protected string $message;
@@ -31,8 +27,6 @@ final class InertiaNotification
     public function success(): self
     {
         $this->type = InertiaNotificationType::Success;
-        $this->icon = 'i-lucide-badge-check';
-        $this->color = 'success';
 
         return $this;
     }
@@ -40,8 +34,6 @@ final class InertiaNotification
     public function error(): self
     {
         $this->type = InertiaNotificationType::Error;
-        $this->icon = 'i-lucide-circle-x';
-        $this->color = 'error';
 
         return $this;
     }
@@ -49,8 +41,6 @@ final class InertiaNotification
     public function info(): self
     {
         $this->type = InertiaNotificationType::Info;
-        $this->icon = 'i-lucide-info';
-        $this->color = 'info';
 
         return $this;
     }
@@ -58,8 +48,6 @@ final class InertiaNotification
     public function warning(): self
     {
         $this->type = InertiaNotificationType::Warning;
-        $this->icon = 'i-lucide-alert-triangle';
-        $this->color = 'warning';
 
         return $this;
     }
@@ -85,20 +73,6 @@ final class InertiaNotification
         return $this;
     }
 
-    public function icon(string $icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function color(string $color): self
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
     /**
      * @throws Exception
      */
@@ -111,8 +85,6 @@ final class InertiaNotification
 
         Inertia::flash($this->key, [
             'type'    => $this->type,
-            'icon'    => $this->icon,
-            'color'   => $this->color,
             'title'   => $this->title,
             'message' => $this->message,
         ]);

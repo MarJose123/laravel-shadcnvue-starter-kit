@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
 import ForgotPasswordForm from "@/components/ForgotPasswordForm.vue";
-import GuestLayout from "@/components/GuestLayout.vue";
+import GuestLayout from "@/layouts/GuestLayout.vue";
 </script>
 <template>
     <Head title="Forgot Password" />
