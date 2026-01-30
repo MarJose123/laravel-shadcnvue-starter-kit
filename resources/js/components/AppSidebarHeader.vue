@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Breadcrumbs from "@/components/Breadcrumbs.vue";
 
+import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { TBreadcrumbItem } from "@/types";
 

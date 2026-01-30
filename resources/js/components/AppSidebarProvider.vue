@@ -3,7 +3,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 </script>
 
 <template>
-    <SidebarProvider storage-key="sidebar" :default-open="true">
+    <SidebarProvider storage-key="sidebar">
         <slot />
     </SidebarProvider>
 </template>

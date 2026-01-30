@@ -6,7 +6,7 @@ import type { TBreadcrumbItem } from "@/types";
 const breadcrumbs: TBreadcrumbItem[] = [
     {
         title: "Dashboard",
-        href: route('dashboard', {}, false),
+        href: route("dashboard", {}, false),
     },
 ];
 </script>

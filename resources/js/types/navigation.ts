@@ -6,23 +6,25 @@ export type TBreadcrumbItem = {
     href?: string;
 };
 
-export type TNavItem = {
+// Base nav item (leaf node - no children)
+export interface INavItem {
     title: string;
     href: NonNullable<InertiaLinkProps["href"]>;
     icon?: LucideIcon;
-};
-
-export type TNavGroup = {
-    title: string;
-    icon?: LucideIcon;
-    type: "group"
-    items: TNavItem[];
-};
-
-export type TNav = {
-    title: string;
-    items: TNavGroup[] | TNavItem[];
 }
 
-export type TSidebarNavigationItems = TNav[];
+// Nav item that can have sub-items (for collapsible menus)
+export interface INavItemWithChildren {
+    title: string;
+    href?: NonNullable<InertiaLinkProps["href"]>;
+    icon?: LucideIcon;
+    items?: INavItem[];
+}
 
+// A navigation group with a label and menu items
+export interface INavGroup {
+    title?: string;
+    items: INavItemWithChildren[];
+}
+
+export type TSidebarNavigationItems = INavGroup[];
