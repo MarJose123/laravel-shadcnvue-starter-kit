@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Link, router, usePage } from "@inertiajs/vue3";
 import {
-    BadgeCheck,
     Bell,
+    Sparkles,
     ChevronsUpDown,
     CreditCard,
     LogOut,
-    Sparkles,
+    Settings,
 } from "lucide-vue-next";
 
 import { computed } from "vue";
@@ -77,16 +77,22 @@ const handleLogout = () => {
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
-                            <BadgeCheck />
-                            Account
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
                             <CreditCard />
                             Billing
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Bell />
                             Notifications
+                        </DropdownMenuItem>
+                        <DropdownMenuItem :as-child="true">
+                            <Link
+                                class="block w-full cursor-pointer"
+                                :href="route('profile.edit')"
+                                prefetch
+                            >
+                                <Settings />
+                                Settings
+                            </Link>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
