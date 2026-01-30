@@ -16,9 +16,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import type {
-    TSidebarNavigationItems,
-} from "@/types";
+import type { TSidebarNavigationItems } from "@/types";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
     variant: "inset",
