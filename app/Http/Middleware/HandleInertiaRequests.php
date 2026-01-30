@@ -39,10 +39,14 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => [
-                    ...$request->user()->toArray(),
-                    'avatar' => 'https://www.shadcn-vue.com/avatars/shadcn.jpg',
-                ],
+                'user' => function () use ($request) {
+                    if (auth()->check()) {
+                        return [
+                            ...$request->user()->toArray(),
+                            'avatar' => 'https://www.shadcn-vue.com/avatars/shadcn.jpg',
+                        ];
+                    }
+                },
             ],
         ];
     }

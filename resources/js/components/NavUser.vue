@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePage } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import {
     BadgeCheck,
     Bell,
@@ -10,7 +10,6 @@ import {
 } from "lucide-vue-next";
 
 import { computed } from "vue";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -26,9 +25,14 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import UserInfo from "@/components/UserInfo.vue";
 
-const { isMobile } = useSidebar();
+const { isMobile, state } = useSidebar();
 const user = computed(() => usePage().props.auth.user);
+
+const handleLogout = () => {
+    router.flushAll();
+};
 </script>
 
 <template>
@@ -40,28 +44,19 @@ const user = computed(() => usePage().props.auth.user);
                         size="lg"
                         class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                     >
-                        <Avatar class="h-8 w-8 rounded-lg">
-                            <AvatarImage :src="user.avatar" :alt="user.name" />
-                            <AvatarFallback class="rounded-lg">
-                                CN
-                            </AvatarFallback>
-                        </Avatar>
-                        <div
-                            class="grid flex-1 text-left text-sm leading-tight"
-                        >
-                            <span class="truncate font-medium">{{
-                                user.name
-                            }}</span>
-                            <span class="truncate text-xs">{{
-                                user.email
-                            }}</span>
-                        </div>
+                        <UserInfo :user="user" />
                         <ChevronsUpDown class="ml-auto size-4" />
                     </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                     class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                    :side="isMobile ? 'bottom' : 'right'"
+                    :side="
+                        isMobile
+                            ? 'bottom'
+                            : state === 'collapsed'
+                              ? 'left'
+                              : 'bottom'
+                    "
                     align="end"
                     :side-offset="4"
                 >
@@ -69,25 +64,7 @@ const user = computed(() => usePage().props.auth.user);
                         <div
                             class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
                         >
-                            <Avatar class="h-8 w-8 rounded-lg">
-                                <AvatarImage
-                                    :src="user.avatar"
-                                    :alt="user.name"
-                                />
-                                <AvatarFallback class="rounded-lg">
-                                    CN
-                                </AvatarFallback>
-                            </Avatar>
-                            <div
-                                class="grid flex-1 text-left text-sm leading-tight"
-                            >
-                                <span class="truncate font-semibold">{{
-                                    user.name
-                                }}</span>
-                                <span class="truncate text-xs">{{
-                                    user.email
-                                }}</span>
-                            </div>
+                            <UserInfo :user="user" />
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -113,9 +90,17 @@ const user = computed(() => usePage().props.auth.user);
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                        <LogOut />
-                        Log out
+                    <DropdownMenuItem :as-child="true">
+                        <Link
+                            class="block w-full cursor-pointer"
+                            :href="route('logout')"
+                            @click="handleLogout"
+                            as="button"
+                            method="post"
+                        >
+                            <LogOut />
+                            Log out
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

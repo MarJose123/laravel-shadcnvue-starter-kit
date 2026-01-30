@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 import { Command, LifeBuoy, Send, Settings2 } from "lucide-vue-next";
+import AppLogo from "@/components/AppLogo.vue";
 import NavMain from "@/components/NavMain.vue";
 import NavSidebarFooter from "@/components/NavSidebarFooter.vue";
 import NavUser from "@/components/NavUser.vue";
@@ -15,7 +16,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import type { TSidebarNavigationItems } from "@/types";
+import type {
+    TSidebarNavigationItems,
+} from "@/types";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
     variant: "inset",
@@ -68,20 +71,8 @@ const footerNavigation: TSidebarNavigationItems = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link href="#">
-                            <div
-                                class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
-                            >
-                                <Command class="size-4" />
-                            </div>
-                            <div
-                                class="grid flex-1 text-left text-sm leading-tight"
-                            >
-                                <span class="truncate font-medium"
-                                    >Acme Inc</span
-                                >
-                                <span class="truncate text-xs">Enterprise</span>
-                            </div>
+                        <Link :href="route('dashboard', {}, false)">
+                            <AppLogo />
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
