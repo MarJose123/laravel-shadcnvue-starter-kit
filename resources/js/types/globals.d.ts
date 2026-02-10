@@ -1,3 +1,4 @@
+import type { INotification } from "@/types/notification";
 import type { AppPageProps } from "./index";
 
 // Extend ImportMeta interface for Vite...
@@ -15,6 +16,11 @@ declare module "vite/client" {
 
 declare module "@inertiajs/core" {
     interface PageProps extends InertiaPageProps, AppPageProps {}
+    export interface InertiaConfig {
+        flashDataType: {
+            notification?: INotification;
+        };
+    }
 }
 
 declare module "vue" {

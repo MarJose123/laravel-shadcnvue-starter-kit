@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import { Link, Form } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
@@ -21,41 +24,56 @@ const props = defineProps<{
     <div :class="cn('flex flex-col gap-6', props.class)">
         <Card class="overflow-hidden p-0">
             <CardContent class="grid p-0 md:grid-cols-2">
-                <form class="p-6 md:p-8">
+                <Form
+                    class="p-6 md:p-8"
+                    :action="route('login.store', {}, false)"
+                    method="post"
+                    :reset-on-success="['password']"
+                    :reset-on-error="['password']"
+                    v-slot="{ errors, processing }"
+                >
                     <FieldGroup>
                         <div
                             class="flex flex-col items-center gap-2 text-center"
                         >
                             <h1 class="text-2xl font-bold">Welcome back</h1>
                             <p class="text-muted-foreground text-balance">
-                                Login to your Acme Inc account
+                                Enter your email and password below to log in
                             </p>
                         </div>
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                                required
-                            />
+                            <Input name="email" id="email" type="email" />
+                            <FieldError v-if="errors.email">{{
+                                errors.email
+                            }}</FieldError>
                         </Field>
                         <Field>
                             <div class="flex items-center">
                                 <FieldLabel for="password">
                                     Password
                                 </FieldLabel>
-                                <a
-                                    href="#"
+                                <Link
+                                    :href="route('password.request', {}, false)"
                                     class="ml-auto text-sm underline-offset-2 hover:underline"
                                 >
                                     Forgot your password?
-                                </a>
+                                </Link>
                             </div>
-                            <Input id="password" type="password" required />
+                            <Input
+                                id="password"
+                                type="password"
+                                name="password"
+                            />
+                            <FieldError v-if="errors.password">{{
+                                errors.password
+                            }}</FieldError>
                         </Field>
                         <Field>
-                            <Button type="submit"> Login </Button>
+                            <Button type="submit" :disabled="processing">
+                                <Spinner v-if="processing" />
+                                Login
+                            </Button>
                         </Field>
                         <FieldSeparator
                             class="*:data-[slot=field-separator-content]:bg-card"
@@ -102,10 +120,10 @@ const props = defineProps<{
                         </Field>
                         <FieldDescription class="text-center">
                             Don't have an account?
-                            <a href="#"> Sign up </a>
+                            <Link :href="route('register')"> Sign up </Link>
                         </FieldDescription>
                     </FieldGroup>
-                </form>
+                </Form>
                 <div class="bg-muted relative hidden md:block">
                     <img
                         src="https://www.shadcn-vue.com/placeholder.svg"
@@ -117,7 +135,8 @@ const props = defineProps<{
         </Card>
         <FieldDescription class="px-6 text-center">
             By clicking continue, you agree to our
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            <Link href="#">Terms of Service</Link> and
+            <a href="#">Privacy Policy</a>.
         </FieldDescription>
     </div>
 </template>

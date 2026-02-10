@@ -9,6 +9,5 @@ export type AppPageProps<
 > = T & {
     name: string;
     auth: Auth;
-    sidebarOpen: boolean;
     [key: string]: unknown;
 };
