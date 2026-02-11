@@ -15,7 +15,7 @@ const sidebarNavItems: INavItem[] = [
     },
     {
         title: "Password",
-        href: "#",
+        href: route("user-password.edit", {}, false),
         icon: KeyRound,
     },
     {

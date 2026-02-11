@@ -96,5 +96,21 @@ class FortifyServiceProvider extends ServiceProvider
                     return back();
                 });
         });
+
+        RateLimiter::for('change-password', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower('change-password|'.$request->input(Fortify::username())).'|'.$request->ip());
+
+            return Limit::perMinute(6)->by($throttleKey)
+                ->response(function () use ($throttleKey) {
+                    $seconds = RateLimiter::availableIn($throttleKey);
+                    InertiaNotification::make()
+                        ->error()
+                        ->title('Too many changes password attempts.')
+                        ->message("Too many requests. Please try again in {$seconds} seconds.")
+                        ->send();
+
+                    return back();
+                });
+        });
     }
 }

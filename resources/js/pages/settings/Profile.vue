@@ -27,7 +27,7 @@ const breadcrumbItems: TBreadcrumbItem[] = [
         href: route("profile.edit", {}, false),
     },
     {
-        title: "Profile settings",
+        title: "Profile",
         href: route("profile.edit", {}, false),
     },
 ];
@@ -38,71 +38,67 @@ const user = page.props.auth.user;
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Profile settings" />
+        <Head title="Profile Settings" />
 
         <h1 class="sr-only">Profile Settings</h1>
 
         <SettingsLayout>
-            <div class="flex flex-col space-y-6">
-                <Form
-                    class="space-y-6"
-                    method="patch"
-                    :action="route('profile.update')"
-                    v-slot="{ processing, errors, clearErrors }"
-                >
-                    <FieldGroup>
-                        <Field :data-invalid="errors.hasOwnProperty('name')">
-                            <FieldLabel for="name">Name</FieldLabel>
-                            <Input
-                                name="name"
-                                id="name"
-                                type="text"
-                                :default-value="user.name"
-                                autocomplete="name"
-                                placeholder="Full name"
-                                @update:modelValue="() => clearErrors('name')"
-                            />
-                            <FieldError v-if="errors.name">{{
-                                errors.name
-                            }}</FieldError>
-                        </Field>
-                        <Field :data-invalid="errors.hasOwnProperty('email')">
-                            <FieldLabel for="email">Email</FieldLabel>
-                            <Input
-                                name="email"
-                                id="email"
-                                type="email"
-                                :default-value="user.email"
-                                autocomplete="email"
-                                placeholder="Email Address"
-                                @update:modelValue="() => clearErrors('email')"
-                            />
-                            <FieldError v-if="errors.name">{{
-                                errors.name
-                            }}</FieldError>
-                            <FieldDescription
-                                v-if="
-                                    mustVerifyEmail && !user.email_verified_at
-                                "
+            <Form
+                class="space-y-6"
+                method="patch"
+                :action="route('profile.update')"
+                v-slot="{ processing, errors, clearErrors }"
+            >
+                <FieldGroup>
+                    <Field :data-invalid="errors.hasOwnProperty('name')">
+                        <FieldLabel for="name">Name</FieldLabel>
+                        <Input
+                            name="name"
+                            id="name"
+                            type="text"
+                            :default-value="user.name"
+                            autocomplete="name"
+                            placeholder="Full name"
+                            @update:modelValue="() => clearErrors('name')"
+                        />
+                        <FieldError v-if="errors.name">{{
+                            errors.name
+                        }}</FieldError>
+                    </Field>
+                    <Field :data-invalid="errors.hasOwnProperty('email')">
+                        <FieldLabel for="email">Email</FieldLabel>
+                        <Input
+                            name="email"
+                            id="email"
+                            type="email"
+                            :default-value="user.email"
+                            autocomplete="email"
+                            placeholder="Email Address"
+                            @update:modelValue="() => clearErrors('email')"
+                        />
+                        <FieldError v-if="errors.name">{{
+                            errors.name
+                        }}</FieldError>
+                        <FieldDescription
+                            v-if="mustVerifyEmail && !user.email_verified_at"
+                        >
+                            Your email address is unverified.
+                            <Link
+                                :href="route('verification.send')"
+                                method="post"
+                                as="button"
+                                class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                             >
-                                Your email address is unverified.
-                                <Link
-                                    :href="route('verification.send')"
-                                    method="post"
-                                    as="button"
-                                    class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                                >
-                                    Click here to resend the verification email.
-                                </Link>
-                            </FieldDescription>
-                        </Field>
-                    </FieldGroup>
-                    <Button type="submit" :disabled="processing">
-                        <Spinner v-if="processing" />
-                        Save Changes
-                    </Button>
-                </Form>
-            </div>
+                                Click here to resend the verification email.
+                            </Link>
+                        </FieldDescription>
+                    </Field>
+                </FieldGroup>
+                <Button type="submit" :disabled="processing">
+                    <Spinner v-if="processing" />
+                    Save Changes
+                </Button>
+            </Form>
 
             <DeleteUser />
         </SettingsLayout>
