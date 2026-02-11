@@ -79,11 +79,11 @@
         ],
         "mailpit": [
             "Composer\\Config::disableProcessTimeout",
-            ".bin/mailpit.exe --smtp-auth-accept-any --smtp-auth-allow-insecure --use-message-dates --tags-username"
+            "@php .bin/mailpit/run-mailpit.php"
         ],
         "mailpit:update": [
             "Composer\\Config::disableProcessTimeout",
-            "@php .bin/updater.php"
+            "@php .bin/mailpit/updater.php"
         ],
         "rector": [
             "vendor/bin/rector process --ansi"
