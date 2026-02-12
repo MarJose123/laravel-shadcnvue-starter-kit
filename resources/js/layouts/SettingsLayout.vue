@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
-import { KeyRound, Palette, ShieldCheck, User } from "lucide-vue-next";
+import { KeyRound, ShieldCheck, User } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCurrentUrl } from "@/composables/useCurrentUrl";
@@ -22,11 +22,6 @@ const sidebarNavItems: INavItem[] = [
         title: "Two-Factor Auth",
         href: "#",
         icon: ShieldCheck,
-    },
-    {
-        title: "Appearance",
-        href: "#",
-        icon: Palette,
     },
 ];
 

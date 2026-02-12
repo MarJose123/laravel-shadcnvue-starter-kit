@@ -2,10 +2,12 @@
 import { Grid2x2Plus } from "lucide-vue-next";
 import Breadcrumbs from "@/components/Breadcrumbs.vue";
 
+import DisplayModeToggle from "@/components/DisplayModeToggle.vue";
 import Notification from "@/components/Notification.vue";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+
 import type { TBreadcrumbItem } from "@/types";
 
 withDefaults(
@@ -34,6 +36,7 @@ withDefaults(
                     <component :is="Grid2x2Plus" />
                 </Button>
                 <Notification />
+                <DisplayModeToggle />
             </div>
         </div>
     </header>
