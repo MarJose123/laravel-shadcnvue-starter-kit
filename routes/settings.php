@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\AppearanceController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 
@@ -8,6 +9,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::patch('/appearance', [AppearanceController::class, 'update'])->name('appearance.update');
 
     Route::middleware(['verified'])->group(function () {
 

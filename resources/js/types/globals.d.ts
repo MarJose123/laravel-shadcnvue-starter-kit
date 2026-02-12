@@ -1,4 +1,4 @@
-import type { Auth } from "@/types/auth";
+import type { Auth, UserAppearance } from "@/types/auth";
 import type { INotification } from "@/types/notification";
 
 // Extend ImportMeta interface for Vite...
@@ -19,6 +19,7 @@ declare module "@inertiajs/core" {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            appearance: UserAppearance;
             [key: string]: unknown;
         };
         flashDataType: {

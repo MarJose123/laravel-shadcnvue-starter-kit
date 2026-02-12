@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Concerns\InertiaNotificationType;
+use App\Enums\InertiaNotificationType;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

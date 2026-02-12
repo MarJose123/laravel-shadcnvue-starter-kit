@@ -7,9 +7,24 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { Appearance } from "@/composables/useAppearance";
 import { useAppearance } from "@/composables/useAppearance";
+import axiosClient from "@/lib/axios";
 
 const { appearance, updateAppearance } = useAppearance();
+
+const toggleAppearance = (appearance: Appearance) => {
+    updateAppearance(appearance);
+    // persist user appearance into the system database
+    axiosClient
+        .patch(route("appearance.update"), { mode: appearance })
+        .then()
+        .catch(() => {
+            console.error(
+                "Something went wrong while updating user appearance.",
+            );
+        });
+};
 </script>
 
 <template>
@@ -20,7 +35,7 @@ const { appearance, updateAppearance } = useAppearance();
                     variant="ghost"
                     class="rounded-full"
                     @click="
-                        updateAppearance(
+                        toggleAppearance(
                             appearance === 'dark' ? 'light' : 'dark',
                         )
                     "

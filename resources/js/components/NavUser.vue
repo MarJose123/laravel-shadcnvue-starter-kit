@@ -26,11 +26,14 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import UserInfo from "@/components/UserInfo.vue";
+import { useAppearance } from "@/composables/useAppearance";
 
 const { isMobile, state } = useSidebar();
+const { updateAppearance } = useAppearance();
 const user = computed(() => usePage().props.auth.user);
 
 const handleLogout = () => {
+    updateAppearance("light");
     router.flushAll();
 };
 </script>

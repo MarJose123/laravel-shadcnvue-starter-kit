@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link, Form } from "@inertiajs/vue3";
+import { Link, Form, usePage } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,11 +13,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import type { Appearance } from "@/composables/useAppearance";
+import { useAppearance } from "@/composables/useAppearance";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
     class?: HTMLAttributes["class"];
 }>();
+
+const { updateAppearance } = useAppearance();
 </script>
 
 <template>
@@ -30,6 +34,13 @@ const props = defineProps<{
                     method="post"
                     :reset-on-success="['password']"
                     :reset-on-error="['password']"
+                    :on-success="
+                        () =>
+                            updateAppearance(
+                                (usePage()?.props?.appearance
+                                    ?.mode as Appearance) || 'light',
+                            )
+                    "
                     v-slot="{ errors, processing }"
                 >
                     <FieldGroup>

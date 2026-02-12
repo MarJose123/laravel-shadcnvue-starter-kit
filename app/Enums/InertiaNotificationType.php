@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Concerns;
+namespace App\Enums;
 
 enum InertiaNotificationType: string
 {
