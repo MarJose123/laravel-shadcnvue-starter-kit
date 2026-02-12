@@ -1,5 +1,5 @@
+import type { Auth } from "@/types/auth";
 import type { INotification } from "@/types/notification";
-import type { AppPageProps } from "./index";
 
 // Extend ImportMeta interface for Vite...
 declare module "vite/client" {
@@ -15,8 +15,12 @@ declare module "vite/client" {
 }
 
 declare module "@inertiajs/core" {
-    interface PageProps extends InertiaPageProps, AppPageProps {}
     export interface InertiaConfig {
+        sharedPageProps: {
+            name: string;
+            auth: Auth;
+            [key: string]: unknown;
+        };
         flashDataType: {
             notification?: INotification;
         };
