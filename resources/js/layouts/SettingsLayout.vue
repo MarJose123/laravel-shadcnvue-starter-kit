@@ -20,7 +20,7 @@ const sidebarNavItems: INavItem[] = [
     },
     {
         title: "Two-Factor Auth",
-        href: "#",
+        href: route("two-factor.show", {}, false),
         icon: ShieldCheck,
     },
 ];
