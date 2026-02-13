@@ -11,6 +11,10 @@ import {
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+    InputPassword,
+    InputPasswordStrength,
+} from "@/components/ui/input-password";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
@@ -62,17 +66,20 @@ const props = defineProps<{
                             :data-invalid="errors.hasOwnProperty('password')"
                         >
                             <FieldLabel for="password"> Password </FieldLabel>
-                            <Input
+                            <InputPasswordStrength
                                 name="password"
                                 id="password"
                                 type="password"
                                 @update:modelValue="
                                     () => clearErrors('password')
                                 "
-                            />
-                            <FieldError v-if="errors.password">{{
-                                errors.password
-                            }}</FieldError>
+                            >
+                                <template #FieldError>
+                                    <FieldError v-if="errors.password">{{
+                                        errors.password
+                                    }}</FieldError>
+                                </template>
+                            </InputPasswordStrength>
                         </Field>
                         <Field
                             :data-invalid="
@@ -82,7 +89,7 @@ const props = defineProps<{
                             <FieldLabel for="confirm-password">
                                 Confirm Password
                             </FieldLabel>
-                            <Input
+                            <InputPassword
                                 name="password_confirmation"
                                 id="confirm-password"
                                 type="password"

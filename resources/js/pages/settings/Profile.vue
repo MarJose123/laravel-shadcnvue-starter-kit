@@ -44,7 +44,7 @@ const user = page.props.auth.user;
 
         <SettingsLayout>
             <Form
-                class="space-y-6"
+                class="space-y-6 max-w-lg"
                 method="patch"
                 :action="route('profile.update')"
                 v-slot="{ processing, errors, clearErrors }"
@@ -100,7 +100,7 @@ const user = page.props.auth.user;
                 </Button>
             </Form>
 
-            <DeleteUser />
+            <DeleteUser class="max-w-lg" />
         </SettingsLayout>
     </AppLayout>
 </template>

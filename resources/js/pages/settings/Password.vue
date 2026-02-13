@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { Form, Head } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { Button } from "@/components/ui/button";
 import {
     Field,
-    FieldDescription,
     FieldError,
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import {
+    InputPassword,
+    InputPasswordStrength,
+} from "@/components/ui/input-password";
 import { Spinner } from "@/components/ui/spinner";
 import AppLayout from "@/layouts/AppLayout.vue";
 import SettingsLayout from "@/layouts/SettingsLayout.vue";
@@ -24,6 +27,10 @@ const breadcrumbItems: TBreadcrumbItem[] = [
         href: route("user-password.edit", {}, false),
     },
 ];
+
+const passwordRef = ref<InstanceType<typeof InputPasswordStrength> | null>(
+    null,
+);
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const breadcrumbItems: TBreadcrumbItem[] = [
 
         <SettingsLayout>
             <Form
-                class="space-y-6"
+                class="space-y-6 max-w-lg"
                 method="put"
                 :action="route('user-password.update')"
                 reset-on-success
@@ -43,6 +50,7 @@ const breadcrumbItems: TBreadcrumbItem[] = [
                     'password_confirmation',
                     'current_password',
                 ]"
+                @error="() => passwordRef?.resetStrength()"
                 :options="{
                     preserveScroll: true,
                 }"
@@ -57,7 +65,7 @@ const breadcrumbItems: TBreadcrumbItem[] = [
                         <FieldLabel for="current_password">
                             Password
                         </FieldLabel>
-                        <Input
+                        <InputPassword
                             name="current_password"
                             id="current_password"
                             type="password"
@@ -72,19 +80,19 @@ const breadcrumbItems: TBreadcrumbItem[] = [
                     </Field>
                     <Field :data-invalid="errors.hasOwnProperty('password')">
                         <FieldLabel for="password"> Password </FieldLabel>
-                        <Input
+                        <InputPasswordStrength
                             name="password"
                             id="password"
                             type="password"
                             autocomplete="new-password"
                             @update:modelValue="() => clearErrors('password')"
-                        />
-                        <FieldDescription>
-                            Must be at least 12 characters long.
-                        </FieldDescription>
-                        <FieldError v-if="errors.password">{{
-                            errors.password
-                        }}</FieldError>
+                        >
+                            <template #FieldError>
+                                <FieldError v-if="errors.password">{{
+                                    errors.password
+                                }}</FieldError>
+                            </template>
+                        </InputPasswordStrength>
                     </Field>
                     <Field
                         :data-invalid="
@@ -94,7 +102,7 @@ const breadcrumbItems: TBreadcrumbItem[] = [
                         <FieldLabel for="confirm-password">
                             Confirm Password
                         </FieldLabel>
-                        <Input
+                        <InputPassword
                             name="password_confirmation"
                             id="confirm-password"
                             type="password"

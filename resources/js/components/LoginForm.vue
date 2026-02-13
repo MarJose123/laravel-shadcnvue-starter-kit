@@ -12,6 +12,7 @@ import {
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { InputPassword } from "@/components/ui/input-password";
 import { Spinner } from "@/components/ui/spinner";
 import type { Appearance } from "@/composables/useAppearance";
 import { useAppearance } from "@/composables/useAppearance";
@@ -54,7 +55,12 @@ const { updateAppearance } = useAppearance();
                         </div>
                         <Field>
                             <FieldLabel for="email"> Email </FieldLabel>
-                            <Input name="email" id="email" type="email" />
+                            <Input
+                                name="email"
+                                id="email"
+                                type="email"
+                                autofocus
+                            />
                             <FieldError v-if="errors.email">{{
                                 errors.email
                             }}</FieldError>
@@ -71,11 +77,7 @@ const { updateAppearance } = useAppearance();
                                     Forgot your password?
                                 </Link>
                             </div>
-                            <Input
-                                id="password"
-                                type="password"
-                                name="password"
-                            />
+                            <InputPassword id="password" name="password" />
                             <FieldError v-if="errors.password">{{
                                 errors.password
                             }}</FieldError>

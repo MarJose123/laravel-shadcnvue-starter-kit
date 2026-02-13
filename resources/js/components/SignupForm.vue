@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Form, Link } from "@inertiajs/vue3";
 import type { HTMLAttributes } from "vue";
+import { ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,12 +12,20 @@ import {
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+    InputPassword,
+    InputPasswordStrength,
+} from "@/components/ui/input-password";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
     class?: HTMLAttributes["class"];
 }>();
+
+const passwordRef = ref<InstanceType<typeof InputPasswordStrength> | null>(
+    null,
+);
 </script>
 
 <template>
@@ -28,6 +37,7 @@ const props = defineProps<{
                     method="post"
                     :action="route('register.store')"
                     :reset-on-error="['password', 'password_confirmation']"
+                    @error="() => passwordRef?.resetStrength()"
                     :reset-on-success="['password', 'password_confirmation']"
                     v-slot="{ errors, processing, clearErrors }"
                 >
@@ -78,20 +88,22 @@ const props = defineProps<{
                             :data-invalid="errors.hasOwnProperty('password')"
                         >
                             <FieldLabel for="password"> Password </FieldLabel>
-                            <Input
-                                name="password"
+                            <InputPasswordStrength
                                 id="password"
-                                type="password"
+                                ref="passwordRef"
+                                name="password"
                                 @update:modelValue="
                                     () => clearErrors('password')
                                 "
-                            />
-                            <FieldDescription>
-                                Must be at least 12 characters long.
-                            </FieldDescription>
-                            <FieldError v-if="errors.password">{{
-                                errors.password
-                            }}</FieldError>
+                            >
+                                <template #FieldError>
+                                    <FieldError
+                                        v-if="errors.password"
+                                        class="mb-2"
+                                        >{{ errors.password }}</FieldError
+                                    >
+                                </template>
+                            </InputPasswordStrength>
                         </Field>
                         <Field
                             :data-invalid="
@@ -101,10 +113,9 @@ const props = defineProps<{
                             <FieldLabel for="confirm-password">
                                 Confirm Password
                             </FieldLabel>
-                            <Input
-                                name="password_confirmation"
+                            <InputPassword
                                 id="confirm-password"
-                                type="password"
+                                name="password_confirmation"
                                 @update:modelValue="
                                     () => clearErrors('password_confirmation')
                                 "

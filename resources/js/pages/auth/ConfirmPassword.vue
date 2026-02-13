@@ -8,7 +8,7 @@ import {
     FieldLabel,
     FieldDescription,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { InputPassword } from "@/components/ui/input-password";
 import { Spinner } from "@/components/ui/spinner";
 import GuestLayout from "@/layouts/GuestLayout.vue";
 </script>
@@ -43,9 +43,8 @@ import GuestLayout from "@/layouts/GuestLayout.vue";
                             class="grid gap-2"
                         >
                             <FieldLabel htmlFor="password">Password</FieldLabel>
-                            <Input
+                            <InputPassword
                                 id="password"
-                                type="password"
                                 name="password"
                                 @update:modelValue="
                                     () => clearErrors('password')

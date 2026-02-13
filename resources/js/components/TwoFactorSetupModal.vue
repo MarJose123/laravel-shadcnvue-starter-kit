@@ -142,7 +142,9 @@ watch(
                     </div>
                 </div>
                 <DialogTitle>{{ modalConfig.title }}</DialogTitle>
-                <DialogDescription class="text-center">
+                <DialogDescription
+                    class="text-center text-pretty md:text-balance"
+                >
                     {{ modalConfig.description }}
                 </DialogDescription>
             </DialogHeader>
