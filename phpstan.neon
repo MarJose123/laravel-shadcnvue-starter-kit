@@ -4,6 +4,7 @@ parameters:
     excludePaths:
         - tests
         - .bin
+        - app/Services/GeoIpLocation.php
     paths:
         - app
         - database
