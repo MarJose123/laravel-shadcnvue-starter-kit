@@ -17,9 +17,13 @@ final readonly class DeleteUserSession
     public function handle(Request $request): void
     {
 
-        $this->guard->logoutOtherDevices($request->input('password'));
+        if ($request->has('session_id')) {
+            $this->revokeSession($request);
+        } else {
+            $this->guard->logoutOtherDevices($request->input('password'));
 
-        $this->deleteOtherSessionRecords($request);
+            $this->deleteOtherSessionRecords($request);
+        }
 
     }
 
@@ -39,6 +43,18 @@ final readonly class DeleteUserSession
         DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
             ->where('user_id', $request->user()->getAuthIdentifier())
             ->where('id', '!=', $request->session()->getId())
+            ->delete();
+    }
+
+    private function revokeSession(Request $request): void
+    {
+        if (config('session.driver') !== 'database') {
+            return;
+        }
+
+        DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
+            ->where('user_id', $request->user()->getAuthIdentifier())
+            ->where('id', '=', $request->input('session_id'))
             ->delete();
     }
 }

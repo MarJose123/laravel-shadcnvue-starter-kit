@@ -2,7 +2,6 @@
 
 namespace App\Actions\Session;
 
-use App\Concerns\Position;
 use hexydec\agentzero\agentzero as Agent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Fluent;
 use Stevebauman\Location\Facades\Location;
+use Stevebauman\Location\Position;
 
 final class RetrieveWebUserSession
 {
@@ -38,26 +38,26 @@ final class RetrieveWebUserSession
                 ->get()
         )->map(function ($session) use ($request) {
             $agent = $this->createAgent($session);
-            /** @var Position $location */
-            $location = Location::get($session->ip_address);
+            /** @var Position|false $location */
+            $location = Location::get(trim((string) $session->ip_address));
 
             return new Fluent([
                 'agent' => [
                     'is_desktop'   => $agent->category === 'desktop',
                     'platform'     => $agent->platform,
                     'browser'      => $agent->browser,
-                    'country'      => $location->countryName,
-                    'country_code' => $location->countryCode,
-                    'city'         => $location->cityName,
-                    'isp'          => $location->isp,
-                    'timezone'     => $location->timezone,
-                    'latitude'     => $location->latitude,
-                    'longitude'    => $location->longitude,
-
+                    'country'      => $location ? $location->countryName : null,
+                    'country_code' => $location ? $location->countryCode : null,
+                    'city'         => $location ? $location->cityName : null,
+                    'timezone'     => $location ? $location->timezone : null,
+                    'latitude'     => $location ? $location->latitude : null,
+                    'longitude'    => $location ? $location->longitude : null,
                 ],
-                'ip_address'        => $session->ip_address,
-                'is_current_device' => $session->id === $request->session()->getId(),
-                'last_active'       => Date::createFromTimestamp($session->last_activity)->diffForHumans(),
+                'session_id'         => $session->id,
+                'ip_address'         => $session->ip_address,
+                'is_current_device'  => $session->id === $request->session()->getId(),
+                'last_active'        => Date::createFromTimestamp($session->last_activity)->diffForHumans(),
+                'risk'               => $location ? (int) $location->risk : null,
             ]);
         });
 

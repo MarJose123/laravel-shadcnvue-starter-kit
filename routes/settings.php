@@ -33,6 +33,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('settings/sessions', [SessionController::class, 'destroy'])
             ->name('user-sessions.destroy');
 
+        Route::delete('settings/sessions', [SessionController::class, 'revokeSession'])
+            ->name('user-sessions.revoke');
+
     });
 
 });

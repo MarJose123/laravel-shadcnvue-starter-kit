@@ -1,12 +1,12 @@
 <?php
 
-use App\Concerns\Position;
 use App\Services\GeoIpLocation;
 use Stevebauman\Location\Drivers\GeoPlugin;
 use Stevebauman\Location\Drivers\Ip2locationio;
 use Stevebauman\Location\Drivers\IpApi;
 use Stevebauman\Location\Drivers\IpInfo;
 use Stevebauman\Location\Drivers\MaxMind;
+use Stevebauman\Location\Position;
 
 return [
 

@@ -2,23 +2,23 @@
 
 namespace App\Services;
 
-use App\Concerns\Position;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\Uri;
 use Override;
 use Stevebauman\Location\Drivers\Driver;
-use Stevebauman\Location\Drivers\HttpDriver;
 use Stevebauman\Location\Position as LocationPosition;
 use Stevebauman\Location\Request;
 
-class GeoIpLocation extends HttpDriver
+class GeoIpLocation extends Driver
 {
     /**
      * Get a position from the request.
      */
     #[Override]
-    public function get(Request $request): LocationPosition|Position|false
+    public function get(Request $request): LocationPosition|false
     {
         return Cache::flexible(key: 'geoip-'.md5($request->getIp()), ttl: [15, 25], callback: function () use ($request) {
             $data = $this->process($request);
@@ -43,34 +43,29 @@ class GeoIpLocation extends HttpDriver
         });
     }
 
-    /**
-     * @param string $ip
-     *
-     * @return string
-     */
-    public function url(string $ip): string
+    protected function hydrate(LocationPosition $position, Fluent $location): LocationPosition
     {
-        return Uri::of('https://api.ipquery.io')
-            ->withPath('/'.$ip)
-            ->withQuery(['format' => 'json']);
+        $position->countryName = $location->get('location.country');
+        $position->countryCode = $location->get('location.country_code');
+        $position->cityName = $location->get('location.city');
+        $position->timezone = $location->get('location.timezone');
+        $position->latitude = $location->get('location.latitude');
+        $position->longitude = $location->get('location.longitude');
+        $position->risk = $location->get('risk.risk_score');
+
+        return $position;
     }
 
     /**
-     * @param Position|LocationPosition $position
-     * @param Fluent                    $location
-     *
-     * @return Position|LocationPosition
+     * @throws ConnectionException
      */
-    protected function hydrate(Position|LocationPosition $position, Fluent $location): Position|LocationPosition
+    protected function process(Request $request): Fluent|false
     {
-        $position->isp = filled($location->isp['isp']) ? $location->isp['isp'] : null;
-        $position->countryName = filled($location->location['country']) ? $location->location['country'] : null;
-        $position->countryCode = filled($location->location['country_code']) ? $location->location['country_code'] : null;
-        $position->cityName = filled($location->location['city']) ? $location->location['city'] : null;
-        $position->timezone = filled($location->location['timezone']) ? $location->location['timezone'] : null;
-        $position->latitude = filled($location->location['latitude']) ? $location->location['latitude'] : null;
-        $position->longitude = filled($location->location['longitude']) ? $location->location['longitude'] : null;
+        $url = Uri::of('https://api.ipquery.io')
+            ->withPath('/'.$request->getIp())
+            ->withQuery(['format' => 'json']);
+        $response = Http::get($url);
 
-        return $position;
+        return new Fluent($response->json());
     }
 }

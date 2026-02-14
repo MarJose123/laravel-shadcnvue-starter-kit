@@ -17,9 +17,11 @@ use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse as Email
 use Laravel\Fortify\Contracts\PasswordResetResponse as PasswordResetResponseContract;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+use Override;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->app->singleton(PasswordResetResponseContract::class, PasswordResetResponse::class);

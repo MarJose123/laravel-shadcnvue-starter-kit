@@ -35,12 +35,13 @@ export type WebSession = {
         country_code: string | null;
         flag: string | null;
         city: string | null;
-        isp: string | null;
         timezone: string | null;
         latitude: string | null;
         longitude: string | null;
     };
+    session_id: string;
     ip_address: string;
     is_current_device: boolean;
     last_active: string;
+    risk: number;
 };

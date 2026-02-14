@@ -63,6 +63,56 @@ class SessionController extends Controller
             ]);
         }
 
+        if ($request->session()->getId() === $request->input('session_id')) {
+            InertiaNotification::make()
+                ->error()
+                ->title('Session revocation failed.')
+                ->message('You cannot revoke the current session.')
+                ->send();
+        }
+
+        resolve(DeleteUserSession::class)->handle($request);
+
+        InertiaNotification::make()
+            ->success()
+            ->title('Sessions revoked')
+            ->message('The sessions have been revoke successfully.')
+            ->send();
+
+        return back();
+
+    }
+
+    /**
+     * Revoke and Log out from other browser sessions.
+     *
+     * @param Request $request
+     *
+     * @throws Exception
+     * @throws AuthenticationException
+     *
+     * @return RedirectResponse
+     */
+    public function revokeSession(Request $request): RedirectResponse
+    {
+        $confirmed = resolve(ConfirmPassword::class)(
+            $this->guard, $request->user(), $request->input('password')
+        );
+
+        if (! $confirmed) {
+            throw ValidationException::withMessages([
+                'password' => __('The password is incorrect.'),
+            ]);
+        }
+
+        if ($request->session()->getId() === $request->input('session_id')) {
+            InertiaNotification::make()
+                ->error()
+                ->title('Session revocation failed.')
+                ->message('You cannot revoke the current session.')
+                ->send();
+        }
+
         resolve(DeleteUserSession::class)->handle($request);
 
         InertiaNotification::make()

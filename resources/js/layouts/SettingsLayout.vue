@@ -46,7 +46,7 @@ const { isCurrentUrl } = useCurrentUrl();
 
         <Separator class="my-4 sm:my-6" />
 
-        <div class="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:gap-12">
+        <div class="flex flex-col w-full gap-6 sm:gap-8 lg:flex-row lg:gap-12">
             <aside class="-mx-4 sm:mx-0 lg:w-1/5 lg:pr-6">
                 <nav
                     class="flex flex-wrap gap-2 px-4 pb-2 sm:px-0 sm:pb-0 lg:flex-col lg:gap-1"
@@ -77,8 +77,8 @@ const { isCurrentUrl } = useCurrentUrl();
                 </nav>
             </aside>
 
-            <div class="flex-1">
-                <section class="space-y-6 lg:max-w-2xl">
+            <div class="flex w-full flex-1">
+                <section class="space-y-6 w-full">
                     <slot />
                 </section>
             </div>
