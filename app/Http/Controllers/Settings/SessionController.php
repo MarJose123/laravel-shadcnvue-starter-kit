@@ -11,6 +11,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -18,7 +19,7 @@ use Inertia\Response;
 use Laravel\Fortify\Actions\ConfirmPassword;
 use Laravel\Fortify\Features;
 
-class SessionController extends Controller
+class SessionController extends Controller implements HasMiddleware
 {
     public function __construct(
         public readonly StatefulGuard $guard,
@@ -42,7 +43,7 @@ class SessionController extends Controller
     }
 
     /**
-     * Log out from other browser sessions.
+     * Log out from other browser sessions by revoking all the session.
      *
      * @param Request $request
      *
@@ -53,6 +54,7 @@ class SessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+
         $confirmed = resolve(ConfirmPassword::class)(
             $this->guard, $request->user(), $request->input('password')
         );
@@ -61,14 +63,6 @@ class SessionController extends Controller
             throw ValidationException::withMessages([
                 'password' => __('The password is incorrect.'),
             ]);
-        }
-
-        if ($request->session()->getId() === $request->input('session_id')) {
-            InertiaNotification::make()
-                ->error()
-                ->title('Session revocation failed.')
-                ->message('You cannot revoke the current session.')
-                ->send();
         }
 
         resolve(DeleteUserSession::class)->handle($request);
@@ -84,7 +78,7 @@ class SessionController extends Controller
     }
 
     /**
-     * Revoke and Log out from other browser sessions.
+     * Revoke specific session and Log out from other browser sessions.
      *
      * @param Request $request
      *
@@ -95,15 +89,6 @@ class SessionController extends Controller
      */
     public function revokeSession(Request $request): RedirectResponse
     {
-        $confirmed = resolve(ConfirmPassword::class)(
-            $this->guard, $request->user(), $request->input('password')
-        );
-
-        if (! $confirmed) {
-            throw ValidationException::withMessages([
-                'password' => __('The password is incorrect.'),
-            ]);
-        }
 
         if ($request->session()->getId() === $request->input('session_id')) {
             InertiaNotification::make()

@@ -3,6 +3,7 @@
 namespace App\Actions\Session;
 
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Events\OtherDeviceLogout;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ final readonly class DeleteUserSession
 
         if ($request->has('session_id')) {
             $this->revokeSession($request);
+            event(new OtherDeviceLogout(auth()->getDefaultDriver(), $request->user()));
         } else {
             $this->guard->logoutOtherDevices($request->input('password'));
 

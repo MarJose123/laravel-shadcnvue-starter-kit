@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { useForm } from "@inertiajs/vue3";
+import RevokeAllUserDialog from "@/components/RevokeAllUserDialog.vue";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -14,12 +15,23 @@ import type { WebSession } from "@/types";
 defineProps<{
     webSessions: WebSession[];
 }>();
+
+const form = useForm({});
+
+const revokeSession = (session: WebSession) => {
+    form.transform((data) => ({
+        ...data,
+        session_id: session.session_id,
+    })).delete(route("user-sessions.revoke"), {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
     <div class="flex w-full flex-col gap-4">
         <div class="flex w-full flex-row-reverse">
-            <Button variant="destructive" size="sm">Revoke All</Button>
+            <RevokeAllUserDialog />
         </div>
         <Table>
             <TableHeader>
@@ -70,6 +82,7 @@ defineProps<{
                             v-else
                             variant="destructive"
                             class="cursor-default"
+                            @click.prevent="revokeSession(session)"
                         >
                             Revoke
                         </Badge>
