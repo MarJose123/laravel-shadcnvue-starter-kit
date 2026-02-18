@@ -9,6 +9,7 @@ use App\Http\Responses\PasswordResetResponse;
 use App\Services\InertiaNotification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -30,6 +31,8 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+
+        ThrottleRequests::shouldHashKeys(false);
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
@@ -65,12 +68,10 @@ class FortifyServiceProvider extends ServiceProvider
             'token' => $request->route('token'),
         ]));
 
-        //
-        //        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/VerifyEmail', [
-        //            'status' => $request->session()->get('status'),
-        //        ]));
-        //
-        //
+        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/VerifyEmail', [
+            'status' => $request->session()->get('status'),
+        ]));
+
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/TwoFactorChallenge'));
 
         Fortify::confirmPasswordView(fn () => Inertia::render('auth/ConfirmPassword'));
@@ -109,6 +110,23 @@ class FortifyServiceProvider extends ServiceProvider
                         ->error()
                         ->title('Too many changes password attempts.')
                         ->message("Too many requests. Please try again in {$seconds} seconds.")
+                        ->send();
+
+                    return back();
+                });
+        });
+
+        RateLimiter::for('verification', function (Request $request) {
+            $userName = Fortify::username();
+            $throttleKey = Str::transliterate(Str::lower('verification|'.$request->user()->{$userName}).'|'.$request->user()->id.'|'.$request->ip());
+
+            return Limit::perMinute(2)->by($throttleKey)
+                ->response(function () use ($throttleKey) {
+                    $seconds = RateLimiter::availableIn($throttleKey);
+                    InertiaNotification::make()
+                        ->error()
+                        ->title('Too many email verification attempts.')
+                        ->message('Too many requests. Please try again later.')
                         ->send();
 
                     return back();
