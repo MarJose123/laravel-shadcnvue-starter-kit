@@ -9,7 +9,6 @@ use App\Http\Responses\PasswordResetResponse;
 use App\Services\InertiaNotification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -94,7 +93,11 @@ class FortifyServiceProvider extends ServiceProvider
                         ->message("Too many requests. Please try again in {$seconds} seconds.")
                         ->send();
 
-                    return back();
+                    return back()->withHeaders([
+                        'Retry-After'   => $seconds,
+                        'X-Status-Code' => 429,
+                        'X-Status'      => 'Too Many Requests',
+                    ]);
                 });
         });
 
@@ -110,7 +113,11 @@ class FortifyServiceProvider extends ServiceProvider
                         ->message("Too many requests. Please try again in {$seconds} seconds.")
                         ->send();
 
-                    return back();
+                    return back()->withHeaders([
+                        'Retry-After'   => $seconds,
+                        'X-Status-Code' => 429,
+                        'X-Status'      => 'Too Many Requests',
+                    ]);
                 });
         });
 
@@ -127,7 +134,11 @@ class FortifyServiceProvider extends ServiceProvider
                         ->message('Too many requests. Please try again later.')
                         ->send();
 
-                    return back();
+                    return back()->withHeaders([
+                        'Retry-After'   => $seconds,
+                        'X-Status-Code' => 429,
+                        'X-Status'      => 'Too Many Requests',
+                    ]);
                 });
         });
     }
