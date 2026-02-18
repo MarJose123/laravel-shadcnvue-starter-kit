@@ -2,11 +2,7 @@
 import { Form, Head, Link } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-    Field,
-    FieldDescription,
-    FieldGroup,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import GuestLayout from "@/layouts/GuestLayout.vue";
 
