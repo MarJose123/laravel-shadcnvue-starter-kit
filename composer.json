@@ -35,8 +35,7 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^4.3",
-        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpunit/phpunit": "^12.5",
         "rector/rector": "^2.3"
     },
     "autoload": {
@@ -99,7 +98,7 @@
         ],
         "test": [
             "@php artisan config:clear --ansi",
-            "@php artisan test"
+            "@php artisan test --stop-on-failure --ansi"
         ],
         "pre-commit": [
             "@rector",
