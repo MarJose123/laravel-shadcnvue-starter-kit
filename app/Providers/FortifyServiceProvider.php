@@ -31,8 +31,6 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-
-        ThrottleRequests::shouldHashKeys(false);
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
