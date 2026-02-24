@@ -2,6 +2,7 @@
 import {
     SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -10,19 +11,20 @@ import { toUrl } from "@/lib/utils";
 import type { INavGroup } from "@/types";
 
 defineProps<{
-    items: INavGroup[];
+    items: INavGroup;
 }>();
 </script>
 
 <template>
     <SidebarGroup>
+        <SidebarGroupLabel>{{ items.title }}</SidebarGroupLabel>
         <SidebarGroupContent>
             <SidebarMenu>
-                <SidebarMenuItem v-for="item in items" :key="item.title">
+                <SidebarMenuItem>
                     <SidebarMenuButton
                         as-child
                         size="sm"
-                        v-for="subItem in item.items"
+                        v-for="subItem in items.items"
                         :key="subItem.title"
                     >
                         <a

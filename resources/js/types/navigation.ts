@@ -28,3 +28,4 @@ export interface INavGroup {
 }
 
 export type TSidebarNavigationItems = INavGroup[];
+export type TFooterNavigationItems = INavGroup;

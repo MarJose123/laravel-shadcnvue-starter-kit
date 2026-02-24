@@ -16,7 +16,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import type { TSidebarNavigationItems } from "@/types";
+import type { TFooterNavigationItems, TSidebarNavigationItems } from "@/types";
 
 const props = withDefaults(defineProps<SidebarProps>(), {
     variant: "inset",
@@ -45,22 +45,21 @@ const navigation: TSidebarNavigationItems = [
     },
 ];
 
-const footerNavigation: TSidebarNavigationItems = [
-    {
-        items: [
-            {
-                title: "Support",
-                href: "#",
-                icon: LifeBuoy,
-            },
-            {
-                title: "Feedback",
-                href: "#",
-                icon: Send,
-            },
-        ],
-    },
-];
+const footerNavigation: TFooterNavigationItems = {
+    title: "Links",
+    items: [
+        {
+            title: "Support",
+            href: "#",
+            icon: LifeBuoy,
+        },
+        {
+            title: "Feedback",
+            href: "#",
+            icon: Send,
+        },
+    ],
+};
 </script>
 
 <template>
@@ -77,7 +76,7 @@ const footerNavigation: TSidebarNavigationItems = [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent class="pb-3">
             <NavMain :items="navigation" />
             <NavSidebarFooter :items="footerNavigation" class="mt-auto" />
         </SidebarContent>
