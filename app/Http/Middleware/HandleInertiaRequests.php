@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\UiAvatars;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Override;
@@ -46,7 +47,7 @@ class HandleInertiaRequests extends Middleware
                     if (auth()->check()) {
                         return [
                             ...$request->user()->toArray(),
-                            'avatar' => 'https://www.shadcn-vue.com/avatars/shadcn.jpg',
+                            'avatar' => UiAvatars::make($request->user()->name)->rounded()->get(),
                         ];
                     }
                 },
