@@ -38,6 +38,17 @@ If you are using Laravel Herd:
 composer run herd:dev
 ```
 
+## Docker (dev)
+
+```bash
+docker compose compose.yml up --build
+```
+
+- App: http://localhost
+- Mailpit: http://localhost:8025
+
+By default, this uses SQLite.
+
 ## Useful scripts
 
 ```bash
