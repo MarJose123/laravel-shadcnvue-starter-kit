@@ -18,6 +18,7 @@ fi
 
 if [ ! -d node_modules ]; then
   bun install
+  bun run build
 fi
 
 chown -R www-data:www-data storage bootstrap/cache
