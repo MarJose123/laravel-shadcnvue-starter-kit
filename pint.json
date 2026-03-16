@@ -58,6 +58,9 @@
             "case": "camel_case"
         },
         "no_closing_tag": true,
-        "blank_line_after_namespace": true
+        "blank_line_after_namespace": true,
+        "fully_qualified_strict_types": {
+            "import_symbols": true
+        }
     }
 }
