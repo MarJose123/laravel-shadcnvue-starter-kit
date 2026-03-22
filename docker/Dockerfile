@@ -1,48 +1,32 @@
-FROM php:8.4-fpm
-LABEL authors="Marjose Darang"
+FROM serversideup/php:8.4-fpm-nginx AS base
 
-ARG DEVELOPMENT=true
+LABEL maintainer="MarJose Darang"
+
+ARG TIMEZONE
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=UTC
+ENV TZ=$TIMEZONE
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    && rm -rf /var/lib/apt/lists/*
+#use the root user for installing dependencies
+USER root
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions \
-    bcmath \
-    curl \
-    dom \
-    exif \
-    gd \
-    mbstring \
-    pcntl \
-    pdo_mysql \
-    pdo_sqlite \
-    xml
+RUN apt update -y && apt install -y curl nodejs supervisor unzip tar
+RUN curl -fsSL https://bun.com/install | bash
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV PATH="/root/.bun/bin:${PATH}"
 
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="/root/.bun/bin:$PATH"
+RUN exec /bin/sh
 
-WORKDIR /var/www/html
+RUN apt autoremove -y
+RUN rm -rf /tmp/* /var/tmp/*
 
+# ─── S6 Overlay service definitions ─────────────────────────────────────────
+# Drop all service directories into s6-rc.d. S6 auto-discovers them.
+# No changes to ENTRYPOINT or CMD are needed — s6 is already PID 1.
+# Copy the entire s6-overlay directory structure
+COPY etc/s6-overlay /etc/s6-overlay
+# Only run scripts need execute permission
+RUN find /etc/s6-overlay/s6-rc.d -name 'run' -o -name 'finish' | xargs chmod 755
 
-COPY docker/entrypoint-dev.sh /usr/local/bin/entrypoint
-RUN chmod +x /usr/local/bin/entrypoint
-
-EXPOSE 9000
-
-ENTRYPOINT ["entrypoint"]
-CMD ["php-fpm"]
+# use the www-data user to serve the application
+USER www-data
