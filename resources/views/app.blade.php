@@ -30,7 +30,10 @@
         }
     </style>
 
-    <title inertia>{{ config('app.name', 'Laravel') }}</title>
+    @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+    <x-inertia::head>
+        <title>{{ config('app.name') }}</title>
+    </x-inertia::head>
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -40,10 +43,8 @@
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
     @routes
-    @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
-    @inertiaHead
 </head>
 <body class="font-sans antialiased">
-@inertia
+<x-inertia::app />
 </body>
 </html>
