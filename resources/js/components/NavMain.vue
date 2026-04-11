@@ -25,9 +25,8 @@ const props = defineProps<{
 }>();
 
 const { isCurrentUrl } = useCurrentUrl();
-const hasActiveChild = (items: INavItem[] = []): boolean => {
-    return items.some((item) => isCurrentUrl(item.href!));
-};
+const hasActiveChild = (items: INavItem[] = []): boolean =>
+    items.some((item) => isCurrentUrl(item.href!, undefined, false));
 </script>
 
 <template>
@@ -63,7 +62,13 @@ const hasActiveChild = (items: INavItem[] = []): boolean => {
                                 >
                                     <SidebarMenuSubButton
                                         as-child
-                                        :is-active="isCurrentUrl(subItem.href)"
+                                        :is-active="
+                                            isCurrentUrl(
+                                                subItem.href,
+                                                undefined,
+                                                false,
+                                            )
+                                        "
                                     >
                                         <Link :href="subItem.href">
                                             <span>{{ subItem.title }}</span>
@@ -80,7 +85,7 @@ const hasActiveChild = (items: INavItem[] = []): boolean => {
                     <SidebarMenuButton
                         as-child
                         :tooltip="item.title"
-                        :is-active="isCurrentUrl(item.href!)"
+                        :is-active="isCurrentUrl(item.href!, undefined, false)"
                     >
                         <Link :href="item.href">
                             <component v-if="item.icon" :is="item.icon" />

@@ -2,7 +2,7 @@
 import { Link, router, usePage } from "@inertiajs/vue3";
 import {
     Bell,
-    Sparkles,
+    SunMoon,
     ChevronsUpDown,
     CreditCard,
     LogOut,
@@ -10,6 +10,7 @@ import {
 } from "lucide-vue-next";
 
 import { computed } from "vue";
+import DisplayModeToggle from "@/components/DisplayModeToggle.vue";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -72,9 +73,15 @@ const handleLogout = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            <Sparkles />
-                            Upgrade to Pro
+                        <DropdownMenuItem
+                            class="flex items-center justify-between"
+                            @select.prevent
+                        >
+                            <div class="flex items-center gap-2">
+                                <SunMoon class="size-4" />
+                                <span>Appearance</span>
+                            </div>
+                            <DisplayModeToggle />
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
